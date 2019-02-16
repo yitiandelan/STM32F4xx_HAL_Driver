@@ -2,6 +2,8 @@
   ******************************************************************************
   * @file    stm32f4xx_hal_nor.c
   * @author  MCD Application Team
+  * @version V1.5.0
+  * @date    06-May-2016
   * @brief   NOR HAL module driver.
   *          This file provides a generic firmware to drive NOR memories mounted 
   *          as external device.
@@ -53,7 +55,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2016 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -95,7 +97,7 @@
 #if defined(STM32F405xx) || defined(STM32F415xx) || defined(STM32F407xx) || defined(STM32F417xx) ||\
     defined(STM32F427xx) || defined(STM32F437xx) || defined(STM32F429xx) || defined(STM32F439xx) ||\
     defined(STM32F446xx) || defined(STM32F469xx) || defined(STM32F479xx) || defined(STM32F412Zx) ||\
-    defined(STM32F412Vx) || defined(STM32F412Rx) || defined(STM32F413xx) || defined(STM32F423xx)
+    defined(STM32F412Vx)
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
       
@@ -104,33 +106,33 @@
   */
 
 /* Constants to define address to set to write a command */
-#define NOR_CMD_ADDRESS_FIRST                 (uint16_t)0x0555
-#define NOR_CMD_ADDRESS_FIRST_CFI             (uint16_t)0x0055
-#define NOR_CMD_ADDRESS_SECOND                (uint16_t)0x02AA
-#define NOR_CMD_ADDRESS_THIRD                 (uint16_t)0x0555
-#define NOR_CMD_ADDRESS_FOURTH                (uint16_t)0x0555
-#define NOR_CMD_ADDRESS_FIFTH                 (uint16_t)0x02AA
-#define NOR_CMD_ADDRESS_SIXTH                 (uint16_t)0x0555
+#define NOR_CMD_ADDRESS_FIRST                 (uint16_t)0x0555U
+#define NOR_CMD_ADDRESS_FIRST_CFI             (uint16_t)0x0055U
+#define NOR_CMD_ADDRESS_SECOND                (uint16_t)0x02AAU
+#define NOR_CMD_ADDRESS_THIRD                 (uint16_t)0x0555U
+#define NOR_CMD_ADDRESS_FOURTH                (uint16_t)0x0555U
+#define NOR_CMD_ADDRESS_FIFTH                 (uint16_t)0x02AAU
+#define NOR_CMD_ADDRESS_SIXTH                 (uint16_t)0x0555U
 
 /* Constants to define data to program a command */
-#define NOR_CMD_DATA_READ_RESET               (uint16_t)0x00F0
-#define NOR_CMD_DATA_FIRST                    (uint16_t)0x00AA
-#define NOR_CMD_DATA_SECOND                   (uint16_t)0x0055
-#define NOR_CMD_DATA_AUTO_SELECT              (uint16_t)0x0090
-#define NOR_CMD_DATA_PROGRAM                  (uint16_t)0x00A0
-#define NOR_CMD_DATA_CHIP_BLOCK_ERASE_THIRD   (uint16_t)0x0080
-#define NOR_CMD_DATA_CHIP_BLOCK_ERASE_FOURTH  (uint16_t)0x00AA
-#define NOR_CMD_DATA_CHIP_BLOCK_ERASE_FIFTH   (uint16_t)0x0055
-#define NOR_CMD_DATA_CHIP_ERASE               (uint16_t)0x0010
-#define NOR_CMD_DATA_CFI                      (uint16_t)0x0098
+#define NOR_CMD_DATA_READ_RESET               (uint16_t)0x00F0U
+#define NOR_CMD_DATA_FIRST                    (uint16_t)0x00AAU
+#define NOR_CMD_DATA_SECOND                   (uint16_t)0x0055U
+#define NOR_CMD_DATA_AUTO_SELECT              (uint16_t)0x0090U
+#define NOR_CMD_DATA_PROGRAM                  (uint16_t)0x00A0U
+#define NOR_CMD_DATA_CHIP_BLOCK_ERASE_THIRD   (uint16_t)0x0080U
+#define NOR_CMD_DATA_CHIP_BLOCK_ERASE_FOURTH  (uint16_t)0x00AAU
+#define NOR_CMD_DATA_CHIP_BLOCK_ERASE_FIFTH   (uint16_t)0x0055U
+#define NOR_CMD_DATA_CHIP_ERASE               (uint16_t)0x0010U
+#define NOR_CMD_DATA_CFI                      (uint16_t)0x0098U
 
-#define NOR_CMD_DATA_BUFFER_AND_PROG          (uint8_t)0x25
-#define NOR_CMD_DATA_BUFFER_AND_PROG_CONFIRM  (uint8_t)0x29
-#define NOR_CMD_DATA_BLOCK_ERASE              (uint8_t)0x30
+#define NOR_CMD_DATA_BUFFER_AND_PROG          (uint8_t)0x25U
+#define NOR_CMD_DATA_BUFFER_AND_PROG_CONFIRM  (uint8_t)0x29U
+#define NOR_CMD_DATA_BLOCK_ERASE              (uint8_t)0x30U
 
 /* Mask on NOR STATUS REGISTER */
-#define NOR_MASK_STATUS_DQ5                   (uint16_t)0x0020
-#define NOR_MASK_STATUS_DQ6                   (uint16_t)0x0040
+#define NOR_MASK_STATUS_DQ5                   (uint16_t)0x0020U
+#define NOR_MASK_STATUS_DQ6                   (uint16_t)0x0040U
 
 /**
   * @}
@@ -171,10 +173,9 @@ static uint32_t uwNORMemoryDataWidth  = NOR_MEMORY_8B;
     
 /**
   * @brief  Perform the NOR memory Initialization sequence
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
-  *                the configuration information for NOR module.
-  * @param  Timing pointer to NOR control timing structure 
-  * @param  ExtTiming pointer to NOR extended mode timing structure    
+  * @param  hnor: pointer to the NOR handle
+  * @param  Timing: pointer to NOR control timing structure 
+  * @param  ExtTiming: pointer to NOR extended mode timing structure    
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_NOR_Init(NOR_HandleTypeDef *hnor, FMC_NORSRAM_TimingTypeDef *Timing, FMC_NORSRAM_TimingTypeDef *ExtTiming)
@@ -204,8 +205,8 @@ HAL_StatusTypeDef HAL_NOR_Init(NOR_HandleTypeDef *hnor, FMC_NORSRAM_TimingTypeDe
 
   /* Enable the NORSRAM device */
   __FMC_NORSRAM_ENABLE(hnor->Instance, hnor->Init.NSBank);
-
-  /* Initialize NOR Memory Data Width*/
+  
+    /* Initialize NOR Memory Data Width*/
   if (hnor->Init.MemoryDataWidth == FMC_NORSRAM_MEM_BUS_WIDTH_8)
   {
     uwNORMemoryDataWidth = NOR_MEMORY_8B;
@@ -223,7 +224,7 @@ HAL_StatusTypeDef HAL_NOR_Init(NOR_HandleTypeDef *hnor, FMC_NORSRAM_TimingTypeDe
 
 /**
   * @brief  Perform NOR memory De-Initialization sequence
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+  * @param  hnor: pointer to a NOR_HandleTypeDef structure that contains
   *                the configuration information for NOR module.
   * @retval HAL status
   */
@@ -246,7 +247,7 @@ HAL_StatusTypeDef HAL_NOR_DeInit(NOR_HandleTypeDef *hnor)
 
 /**
   * @brief  NOR MSP Init
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+  * @param  hnor: pointer to a NOR_HandleTypeDef structure that contains
   *                the configuration information for NOR module.
   * @retval None
   */
@@ -261,7 +262,7 @@ __weak void HAL_NOR_MspInit(NOR_HandleTypeDef *hnor)
 
 /**
   * @brief  NOR MSP DeInit
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+  * @param  hnor: pointer to a NOR_HandleTypeDef structure that contains
   *                the configuration information for NOR module.
   * @retval None
   */
@@ -275,20 +276,18 @@ __weak void HAL_NOR_MspDeInit(NOR_HandleTypeDef *hnor)
 }
 
 /**
-  * @brief  NOR MSP Wait for Ready/Busy signal
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
+  * @brief  NOR BSP Wait for Ready/Busy signal
+  * @param  hnor: pointer to a NOR_HandleTypeDef structure that contains
   *                the configuration information for NOR module.
-  * @param  Timeout Maximum timeout value
+  * @param  Timeout: Maximum timeout value
   * @retval None
   */
 __weak void HAL_NOR_MspWait(NOR_HandleTypeDef *hnor, uint32_t Timeout)
 {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(hnor);
-  UNUSED(Timeout);
-  
   /* NOTE : This function Should not be modified, when the callback is needed,
-            the HAL_NOR_MspWait could be implemented in the user file
+            the HAL_NOR_BspWait could be implemented in the user file
    */ 
 }
   
@@ -312,9 +311,8 @@ __weak void HAL_NOR_MspWait(NOR_HandleTypeDef *hnor, uint32_t Timeout)
   
 /**
   * @brief  Read NOR flash IDs
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
-  *                the configuration information for NOR module.
-  * @param  pNOR_ID  pointer to NOR ID structure
+  * @param  hnor: pointer to the NOR handle
+  * @param  pNOR_ID : pointer to NOR ID structure
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_NOR_Read_ID(NOR_HandleTypeDef *hnor, NOR_IDTypeDef *pNOR_ID)
@@ -327,7 +325,7 @@ HAL_StatusTypeDef HAL_NOR_Read_ID(NOR_HandleTypeDef *hnor, NOR_IDTypeDef *pNOR_I
   /* Check the NOR controller state */
   if(hnor->State == HAL_NOR_STATE_BUSY)
   {
-     return HAL_BUSY;
+     return HAL_BUSY;                                    
   }
   
   /* Select the NOR device address */
@@ -373,8 +371,7 @@ HAL_StatusTypeDef HAL_NOR_Read_ID(NOR_HandleTypeDef *hnor, NOR_IDTypeDef *pNOR_I
 
 /**
   * @brief  Returns the NOR memory to Read mode.
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
-  *                the configuration information for NOR module.
+  * @param  hnor: pointer to the NOR handle
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_NOR_ReturnToReadMode(NOR_HandleTypeDef *hnor)
@@ -421,10 +418,9 @@ HAL_StatusTypeDef HAL_NOR_ReturnToReadMode(NOR_HandleTypeDef *hnor)
 
 /**
   * @brief  Read data from NOR memory 
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
-  *                the configuration information for NOR module.
-  * @param  pAddress pointer to Device address
-  * @param  pData  pointer to read data  
+  * @param  hnor: pointer to the NOR handle
+  * @param  pAddress: pointer to Device address
+  * @param  pData : pointer to read data  
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_NOR_Read(NOR_HandleTypeDef *hnor, uint32_t *pAddress, uint16_t *pData)
@@ -464,10 +460,10 @@ HAL_StatusTypeDef HAL_NOR_Read(NOR_HandleTypeDef *hnor, uint32_t *pAddress, uint
   /* Send read data command */
   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST), NOR_CMD_DATA_FIRST); 
   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_SECOND), NOR_CMD_DATA_SECOND);  
-  NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_THIRD), NOR_CMD_DATA_READ_RESET);
+  NOR_WRITE((uint32_t)pAddress, NOR_CMD_DATA_READ_RESET);
 
   /* Read the data */
-  *pData = *(__IO uint32_t *)(uint32_t)pAddress;
+ *pData = *(__IO uint32_t *)(uint32_t)pAddress;
   
   /* Check the NOR controller state */
   hnor->State = HAL_NOR_STATE_READY;
@@ -480,10 +476,9 @@ HAL_StatusTypeDef HAL_NOR_Read(NOR_HandleTypeDef *hnor, uint32_t *pAddress, uint
 
 /**
   * @brief  Program data to NOR memory 
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
-  *                the configuration information for NOR module.
-  * @param  pAddress Device address
-  * @param  pData  pointer to the data to write   
+  * @param  hnor: pointer to the NOR handle
+  * @param  pAddress: Device address
+  * @param  pData : pointer to the data to write   
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_NOR_Program(NOR_HandleTypeDef *hnor, uint32_t *pAddress, uint16_t *pData)
@@ -539,11 +534,11 @@ HAL_StatusTypeDef HAL_NOR_Program(NOR_HandleTypeDef *hnor, uint32_t *pAddress, u
 
 /**
   * @brief  Reads a half-word buffer from the NOR memory.
-  * @param  hnor pointer to the NOR handle
-  * @param  uwAddress NOR memory internal address to read from.
-  * @param  pData pointer to the buffer that receives the data read from the 
+  * @param  hnor: pointer to the NOR handle
+  * @param  uwAddress: NOR memory internal address to read from.
+  * @param  pData: pointer to the buffer that receives the data read from the 
   *         NOR memory.
-  * @param  uwBufferSize  number of Half word to read.
+  * @param  uwBufferSize : number of Half word to read.
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_NOR_ReadBuffer(NOR_HandleTypeDef *hnor, uint32_t uwAddress, uint16_t *pData, uint32_t uwBufferSize)
@@ -583,7 +578,7 @@ HAL_StatusTypeDef HAL_NOR_ReadBuffer(NOR_HandleTypeDef *hnor, uint32_t uwAddress
   /* Send read data command */
   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST), NOR_CMD_DATA_FIRST); 
   NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_SECOND), NOR_CMD_DATA_SECOND);  
-  NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_THIRD), NOR_CMD_DATA_READ_RESET);
+  NOR_WRITE(uwAddress, 0x00F0U);
   
   /* Read buffer */
   while( uwBufferSize > 0U) 
@@ -605,10 +600,10 @@ HAL_StatusTypeDef HAL_NOR_ReadBuffer(NOR_HandleTypeDef *hnor, uint32_t uwAddress
 /**
   * @brief  Writes a half-word buffer to the NOR memory. This function must be used 
             only with S29GL128P NOR memory. 
-  * @param  hnor pointer to the NOR handle
-  * @param  uwAddress NOR memory internal start write address 
-  * @param  pData pointer to source data buffer. 
-  * @param  uwBufferSize Size of the buffer to write
+  * @param  hnor: pointer to the NOR handle
+  * @param  uwAddress: NOR memory internal start write address 
+  * @param  pData: pointer to source data buffer. 
+  * @param  uwBufferSize: Size of the buffer to write
   * @retval HAL status
   */ 
 HAL_StatusTypeDef HAL_NOR_ProgramBuffer(NOR_HandleTypeDef *hnor, uint32_t uwAddress, uint16_t *pData, uint32_t uwBufferSize)
@@ -685,10 +680,9 @@ HAL_StatusTypeDef HAL_NOR_ProgramBuffer(NOR_HandleTypeDef *hnor, uint32_t uwAddr
 
 /**
   * @brief  Erase the specified block of the NOR memory 
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
-  *                the configuration information for NOR module.
-  * @param  BlockAddress  Block to erase address 
-  * @param  Address Device address
+  * @param  hnor: pointer to the NOR handle
+  * @param  BlockAddress : Block to erase address 
+  * @param  Address: Device address
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_NOR_Erase_Block(NOR_HandleTypeDef *hnor, uint32_t BlockAddress, uint32_t Address)
@@ -745,17 +739,13 @@ HAL_StatusTypeDef HAL_NOR_Erase_Block(NOR_HandleTypeDef *hnor, uint32_t BlockAdd
 
 /**
   * @brief  Erase the entire NOR chip.
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
-  *                the configuration information for NOR module.
-  * @param  Address  Device address  
+  * @param  hnor: pointer to the NOR handle
+  * @param  Address : Device address  
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_NOR_Erase_Chip(NOR_HandleTypeDef *hnor, uint32_t Address)
 {
   uint32_t deviceaddress = 0U;
-  
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(Address);
   
   /* Process Locked */
   __HAL_LOCK(hnor);
@@ -806,9 +796,8 @@ HAL_StatusTypeDef HAL_NOR_Erase_Chip(NOR_HandleTypeDef *hnor, uint32_t Address)
 
 /**
   * @brief  Read NOR flash CFI IDs
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
-  *                the configuration information for NOR module.
-  * @param  pNOR_CFI  pointer to NOR CFI IDs structure  
+  * @param  hnor: pointer to the NOR handle
+  * @param  pNOR_CFI : pointer to NOR CFI IDs structure  
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_NOR_Read_CFI(NOR_HandleTypeDef *hnor, NOR_CFITypeDef *pNOR_CFI)
@@ -867,7 +856,7 @@ HAL_StatusTypeDef HAL_NOR_Read_CFI(NOR_HandleTypeDef *hnor, NOR_CFITypeDef *pNOR
   * @}
   */
   
-/** @defgroup NOR_Exported_Functions_Group3 NOR Control functions
+/** @defgroup NOR_Exported_Functions_Group3 Control functions 
  *  @brief   management functions 
  *
 @verbatim   
@@ -884,8 +873,7 @@ HAL_StatusTypeDef HAL_NOR_Read_CFI(NOR_HandleTypeDef *hnor, NOR_CFITypeDef *pNOR
     
 /**
   * @brief  Enables dynamically NOR write operation.
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
-  *                the configuration information for NOR module.
+  * @param  hnor: pointer to the NOR handle
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_NOR_WriteOperation_Enable(NOR_HandleTypeDef *hnor)
@@ -907,8 +895,7 @@ HAL_StatusTypeDef HAL_NOR_WriteOperation_Enable(NOR_HandleTypeDef *hnor)
 
 /**
   * @brief  Disables dynamically NOR write operation.
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
-  *                the configuration information for NOR module.
+  * @param  hnor: pointer to the NOR handle
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_NOR_WriteOperation_Disable(NOR_HandleTypeDef *hnor)
@@ -935,7 +922,7 @@ HAL_StatusTypeDef HAL_NOR_WriteOperation_Disable(NOR_HandleTypeDef *hnor)
   * @}
   */  
   
-/** @defgroup NOR_Exported_Functions_Group4 NOR State functions 
+/** @defgroup NOR_Exported_Functions_Group4 State functions 
  *  @brief   Peripheral State functions 
  *
 @verbatim   
@@ -952,8 +939,7 @@ HAL_StatusTypeDef HAL_NOR_WriteOperation_Disable(NOR_HandleTypeDef *hnor)
   
 /**
   * @brief  return the NOR controller state
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
-  *                the configuration information for NOR module.
+  * @param  hnor: pointer to the NOR handle
   * @retval NOR controller state
   */
 HAL_NOR_StateTypeDef HAL_NOR_GetState(NOR_HandleTypeDef *hnor)
@@ -963,17 +949,16 @@ HAL_NOR_StateTypeDef HAL_NOR_GetState(NOR_HandleTypeDef *hnor)
 
 /**
   * @brief  Returns the NOR operation status.
-  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains
-  *                the configuration information for NOR module.   
-  * @param  Address Device address
-  * @param  Timeout NOR programming Timeout
+  * @param  hnor: pointer to the NOR handle  
+  * @param  Address: Device address
+  * @param  Timeout: NOR programming Timeout
   * @retval NOR_Status: The returned value can be: HAL_NOR_STATUS_SUCCESS, HAL_NOR_STATUS_ERROR
   *         or HAL_NOR_STATUS_TIMEOUT
   */
 HAL_NOR_StatusTypeDef HAL_NOR_GetStatus(NOR_HandleTypeDef *hnor, uint32_t Address, uint32_t Timeout)
 { 
   HAL_NOR_StatusTypeDef status = HAL_NOR_STATUS_ONGOING;
-  uint16_t tmpSR1 = 0, tmpSR2 = 0;
+  uint16_t tmpSR1 = 0U, tmpSR2 = 0U;
   uint32_t tickstart = 0U;
 
   /* Poll on NOR memory Ready/Busy signal ------------------------------------*/
@@ -1030,14 +1015,14 @@ HAL_NOR_StatusTypeDef HAL_NOR_GetStatus(NOR_HandleTypeDef *hnor, uint32_t Addres
 /**
   * @}
   */
+  
 
 /**
   * @}
   */
 #endif /* STM32F405xx || STM32F415xx || STM32F407xx || STM32F417xx || STM32F427xx ||\
           STM32F437xx || STM32F429xx || STM32F439xx || STM32F446xx || STM32F469xx ||\
-          STM32F479xx || STM32F412Zx || STM32F412Vx || STM32F412Rx || STM32F413xx ||\
-          STM32F423xx */
+          STM32F479xx || STM32F412Zx || STM32F412Vx */
 #endif /* HAL_NOR_MODULE_ENABLED */
 /**
   * @}
